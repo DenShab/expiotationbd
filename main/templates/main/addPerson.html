@@ -1,0 +1,403 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+Создать сотрудника
+{% endblock %}
+
+{% block name %}
+Создать сотрудника
+{% endblock %}
+
+{% block content %}
+{% load static %}
+
+
+<form method="POST" action="#" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <span>{{ error }}</span>
+    <!--{{ form.as_p }}-->
+
+
+    <h4 class="mb-3">Данные о сотруднике</h4>
+    <div class="row g-3">
+        <div class="col-sm-4">
+            <label class="form-label">Фамилия</label>
+            {{ form.surname }}
+            <div class="invalid-feedback">
+                Valid first name is required.
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <label class="form-label">Имя</label>
+            {{ form.name }}
+            <div class="invalid-feedback">
+                Valid last name is required.
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <label class="form-label">Отчество</label>
+            {{ form.middleName }}
+            <div class="invalid-feedback">
+                Valid last name is required.
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <label class="form-label">Дата рождения</label>
+            {{ form.birthDate }}
+            <div class="invalid-feedback">
+                Valid last name is required.
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <label class="form-label">Номер телефона</label>
+            {{ form.phoneNumber }}
+            <div class="invalid-feedback">
+                Valid last name is required.
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <label class="form-label">Электронная почта</label>
+            {{ form.email }}
+            <div class="invalid-feedback">
+                Valid last name is required.
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <label class="form-label">Дата трудоустройства</label>
+            {{ form.dateOfEmployment }}
+            <div class="invalid-feedback">
+                Valid last name is required.
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <label class="form-label">Структурное подразделение</label>
+            {{ form.structuralDivision }}
+            <div class="invalid-feedback">
+                Valid last name is required.
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <label class="form-label">Отдел</label>
+            {{ form.department }}
+            <div class="invalid-feedback">
+                Valid last name is required.
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <label class="form-label">Должность</label>
+            {{ form.heldPost }}
+            <div class="invalid-feedback">
+                Valid last name is required.
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <h4 class="mb-3">Обучение</h4>
+        <h6 class="mb-3">Обязательно обучение</h6>
+        <div class="table-responsive">
+            <table class="table form-table table-bordered table-sm table-responsive">
+                <thead class="text-center">
+                <tr>
+                    <th>Название обучения</th>
+                    <th>Тип обучения</th>
+                    <th>Дата прохождения</th>
+                    <th>Дата повторного прохождения</th>
+                    <th>Импортировать</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in formset %}
+                <tr class="item_{{ formset.prefix }}">
+                    <td>
+                        {{ item.nameOfTraining }}
+                    </td>
+                    <td>
+                        {{ item.typeOfTraining }}
+                    </td>
+                    <td>
+                        {{ item.dateOfCompletionOfTraining }}
+                    </td>
+                    <td>
+                        {{ item.dateOfRepeatedPassageOfTraining }}
+                    </td>
+                    <td>
+                        {{ item.files }}
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm remove-form-row"
+                                id="{{ formset.prefix }}">
+
+                            Удалить
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="9"
+                        style="border-left: none!important; border-right: none !important; border-bottom: none!important;">
+                        <button type="button" class="btn btn-sm btn-success add-form-row"
+                                id="{{ formset.prefix }}">
+                            Добавить
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        {{ formset.management_form }}
+        <h4 class="mb-3">Дополнительное обучение</h4>
+        <div class="table-responsive">
+            <table class="table form-table table-bordered table-sm">
+                <thead class="text-center">
+                <tr>
+                    <th>Название обучения</th>
+                    <th>Тип обучения</th>
+                    <th>Дата прохождения</th>
+                    <th>Дата повторного прохождения</th>
+                    <th>Импортировать</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in additionalTrainingFormset %}
+                <tr class="item_{{ additionalTrainingFormset.prefix }}">
+                    <td>
+                        {{ item.nameOfTraining }}
+                    </td>
+                    <td>
+                        {{ item.typeOfTraining }}
+                    </td>
+                    <td>
+                        {{ item.dateOfCompletionOfTraining }}
+                    </td>
+                    <td>
+                        {{ item.dateOfRepeatedPassageOfTraining }}
+                    </td>
+                    <td>
+                        {{ item.files }}
+                    </td>
+
+
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm remove-form-row"
+                                id="{{ additionalTrainingFormset.prefix }}">
+
+                            Удалить
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="9"
+                        style="border-left: none!important; border-right: none !important; border-bottom: none!important;">
+                        <button type="button" class="btn btn-sm btn-success add-form-row"
+                                id="{{ additionalTrainingFormset.prefix }}">
+                            Добавить
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        {{ additionalTrainingFormset.management_form }}
+
+
+        <h4 class="mb-3">Медосмотр</h4>
+
+        <div class="col-sm-4">
+            <label class="form-label">Дата прохождения медосмотра</label>
+            {{ medicalExaminationForm.dateOfMedicalExamination }}
+            <div class="invalid-feedback">
+                Valid last name is required.
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <label class="form-label">Дата повторного прохождения медосмотра</label>
+            {{ medicalExaminationForm.dateOfRepeatedMedicalExamination }}
+            <div class="invalid-feedback">
+                Valid last name is required.
+            </div>
+        </div>
+
+
+        <h5 class="mb-3">График медосмотров</h5>
+        <h5 class="mb-3" id="add-html-here"></h5>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Дата</th>
+                <th>ФИО</th>
+            </tr>
+            </thead>
+            <tbody id="table_of_items" >
+            {% for date , namelist in schedule.items %}
+            <tr>
+                <td>{{date}}</td>
+                <td>
+                    {%for name in namelist%}
+                    <li>{{name}}</li>
+                    {%endfor%}
+                </td>
+            </tr>
+            {%endfor%}
+            </tbody>
+        </table>
+
+        <div class="btn-group">
+            <button class="w-100 btn btn-primary" type="submit" name="previous" formnovalidate>
+                Предыдущий месяц
+            </button>
+            <button class="w-100 btn btn-primary" type="submit" name="next" formnovalidate>Следующий
+                месяц
+            </button>
+        </div>
+        <script>
+        var n=0;
+              var ajaxFormNext = function() {
+              $.ajax({
+    method: 'post',
+    url: 'controller/',
+    data:  {'serialized-data': '' + n},
+    success: function (data) {
+    $("#add-html-here").html(data.period);
+    $("#table_of_items").html(data.html);
+    }
+}).done(function(response){
+$("#add-html-here").html(response.period);
+    $("#table_of_items").html(response.html);
+    console.log(response)
+});
+
+}
+ $('button[name="previous"]').on('click', function(e) {
+    console.log('My message');
+    n=n-1;
+  e.preventDefault();
+  ajaxFormNext();
+});
+
+ $('button[name="next"]').on('click', function(e) {
+console.log('My message');
+n=n+1;
+  e.preventDefault();
+  ajaxFormNext();
+});
+$(document).ready(function() {
+  ajaxFormNext();
+});
+
+
+
+        </script>
+
+
+        <div class="btn-group">
+
+
+            <button class="w-100 btn btn-secondary" type="submit" id="3" name="clean">Очистить</button>
+            <button class="w-100 btn btn-primary" type="submit" name="save">Сохранить</button>
+            <button class='w-100 btn btn-danger' type="submit" name="remove_levels" value="delete"><span
+                    class="fa fa-times"></span> Отментиь
+            </button>
+        </div>
+
+        <div id="confirm" class="modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p>Сохранить данные?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit" name="save">Сохранить</button>
+                        <button type="button" class="btn btn-danger" name="cancel" onclick=" relocate_home()">Отменить
+                        </button>
+                        <button type="button" data-dismiss="modal" class="btn btn-secondary">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="confirm2" class="modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p>Сохранить данные?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit" name="save">Сохранить</button>
+                        <button type="button" class="btn btn-danger" name="cancel" onclick=" relocate_this()">Очистить
+                        </button>
+                        <button type="button" data-dismiss="modal" class="btn btn-secondary">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript" src="{% static 'js/formset.js' %}"></script>
+
+<script type="text/javascript">
+ $('button[name="remove_levels"]').on('click', function(e) {
+  var $form = $(this).closest('form');
+  e.preventDefault();
+  $('#confirm').modal({
+      backdrop: 'static',
+      keyboard: false
+    })
+    .one('click', '#delete', function(e) {
+      $form.trigger('submit');
+    });
+});
+
+
+ $('button[name="clean"]').on('click', function(e) {
+  var $form = $(this).closest('form');
+  e.preventDefault();
+  $('#confirm2').modal({
+      backdrop: 'static',
+      keyboard: false
+    })
+    .one('click', '#delete', function(e) {
+      $form.trigger('submit');
+    });
+});
+
+
+function relocate_home()
+{
+     location.href = "/";
+}
+
+function relocate_this()
+{
+     location.href = "";
+}
+
+
+
+
+
+
+
+
+</script>
+
+
+{% endblock%}

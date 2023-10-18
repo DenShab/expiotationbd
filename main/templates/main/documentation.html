@@ -1,0 +1,85 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+Документация
+{% endblock %}
+
+{% block name %}
+Документация
+{% endblock %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/css/dataTables.bootstrap4.min.css"
+      rel="stylesheet"/>
+<div class="row g-3 kek1">
+
+    <div class=" container-fluid">
+        <div class="row container-fluid">
+            <table id="example" class="table table-responsive container-fluid" style="height:100vh">
+                <thead>
+                <tr>
+                    <th>#</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if documentation %}
+                {% for el in documentation%}
+                <tr>
+                    <td>
+                        <a href="{{el.file.url}}" download="">{{el.file}}</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr class="odd">
+                    <td valign="top" colspan="3" class="dataTables_empty">Записи не найдены</td>
+                </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <form method="POST" enctype="multipart/form-data">
+
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <span>{{ error }}</span>
+
+
+        <div class="form-group">
+            {{ form.as_p }}
+        </div>
+        <button class="w-100 btn btn-primary" type="submit" name="save">Сохранить</button>
+
+    </form>
+</div>
+
+
+{% endblock %}
+
+
+{% block activeDocumentation %}active{% endblock %}
+
+{% block extra_script %}
+<script>$(document).ready(function() {
+  $("#example").DataTable();
+});
+
+
+
+
+
+
+
+</script>
+<script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/js/dataTables.bootstrap4.min.js"></script>
+{% endblock%}

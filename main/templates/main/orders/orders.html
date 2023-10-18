@@ -1,0 +1,159 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}
+Заказы
+{% endblock %}
+
+{% block name %}
+Заказы
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/css/dataTables.bootstrap4.min.css"
+      rel="stylesheet"/>
+<form method="POST">
+    {% csrf_token %}
+    <div class="btn-group mb-1 ">
+        <a href="{% url 'addOrders' %}" class="btn btn-sm btn-primary" role="button"
+           data-bs-toggle="button">Добавить заказ</a>
+    </div>
+    <div class=" container-fluid">
+        <div class="row table-responsive">
+            <table id="example" class="table table-sm " cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>Название товара</th>
+                    <th>Количество</th>
+                    <th>Дата выдачи</th>
+                    <th>Кому (отдел/человек)</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if orders %}
+                {% for el in orders%}
+                <tr>
+                    <td>{{el.expenses.name}}</td>
+                    <th>{{el.typeOfTesting}}</th>
+                    <th>{{el.date}}</th>
+                    <th>{{el.department}} {%if el.personnel %} {{el.personnel.fullname}} {%endif%}</th>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr class="odd">
+                    <td valign="top" colspan="3" class="dataTables_empty">Записи не найдены</td>
+                </tr>
+                {% endif %}
+                </tbody>
+            </table>
+
+
+            <h4 class="mb-3">Срок годности истек</h4>
+            <table id="example1" class="table table-sm " cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Название товара</th>
+                    <th>Дата покупки</th>
+                    <th>Срок годности</th>
+                    <th>Количество</th>
+                    <th>Цена</th>
+                    <th>Стоимость</th>
+                    <th>Накладная</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if delay %}
+                {% for el in delay%}
+                <tr>
+                    <td>
+                        <div class="btn-group mb-1 ">
+                            <a href="{% url 'addExpenses' %}" class="btn btn-sm btn-primary" role="button"
+                               data-bs-toggle="button">Сформировать заказ</a>
+                        </div>
+                    </td>
+                    <td>{{el.name}}</td>
+                    <td>{{el.date}}</td>
+                    <td>{{el.typeOfTesting}} {{el.expiration}}</td>
+                    <td>{{el.quantity}}</td>
+                    <td>{{el.price}}</td>
+                    <td>{{el.cost}}</td>
+                    <td><a href="{{el.invoice.url}}" download="">{{el.invoice}}</a></td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr class="odd">
+                    <td valign="top" colspan="3" class="dataTables_empty">Записи не найдены</td>
+                </tr>
+                {% endif %}
+                </tbody>
+            </table>
+
+            <h4 class="mb-3">Срок годности скоро истечет (осталось менше 30 дней)</h4>
+            <table id="example2" class="table table-sm " cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Название товара</th>
+                    <th>Дата покупки</th>
+                    <th>Срок годности</th>
+                    <th>Количество</th>
+                    <th>Цена</th>
+                    <th>Стоимость</th>
+                    <th>Накладная</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if soon %}
+                {% for el in soon%}
+                <tr>
+                    <td>
+
+                        <div class="btn-group mb-1 ">
+                            <a href="{% url 'addExpenses' %}" class="btn btn-sm btn-primary" role="button"
+                               data-bs-toggle="button">Сформировать заказ</a>
+                        </div>
+                    </td>
+                    <td>{{el.name}}</td>
+                    <td>{{el.date}}</td>
+                    <td>{{el.typeOfTesting}} {{el.expiration}}</td>
+                    <td>{{el.quantity}}</td>
+                    <td>{{el.price}}</td>
+                    <td>{{el.cost}}</td>
+                    <td><a href="{{el.invoice.url}}" download="">{{el.invoice}}</a></td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr class="odd">
+                    <td valign="top" colspan="3" class="dataTables_empty">Записи не найдены</td>
+                </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block activeOrders %}active{% endblock %}
+
+{% block extra_script %}
+<script>
+$(document).ready(function() {
+  $("#example").DataTable();
+});
+
+$(document).ready(function() {
+  $("#example1").DataTable();
+});
+
+$(document).ready(function() {
+  $("#example2").DataTable();
+});
+
+
+
+
+</script>
+{% endblock%}

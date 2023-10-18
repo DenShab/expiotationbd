@@ -1,0 +1,92 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}
+Реестр нарушений
+{% endblock %}
+
+{% block name %}
+Реестр нарушений
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/css/dataTables.bootstrap4.min.css"
+      rel="stylesheet"/>
+<form method="POST">
+
+    {% csrf_token %}
+
+
+    <!--
+    <script src="{% static 'js\index\dataTables.bootstrap.min.js' %}"></script>
+    <script src="{% static 'js\index\jquery.dataTables.min.js' %}"></script>
+    -->
+
+
+    <div class="btn-group mb-1">
+        <a href="{% url 'addRegisterOfViolations' %}" class="btn btn-sm btn-primary" role="button" data-bs-toggle="button">Добавить
+            нарушение</a>
+    </div>
+
+
+    <div class=" container-fluid">
+
+        <div class="row table-responsive container-fluid">
+            <table id="example" class="table table-sm container-fluid " cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Название нарушения</th>
+                    <th>Описание нарушения</th>
+                    <th>Дата нарушения</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if violations %}
+                {% for el in violations%}
+                <tr>
+                    <td>
+                        <button type="submit" class="btn btn-sm" name="value" value="{{el.id}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"></path>
+                                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"></path>
+                            </svg>
+                        </button>
+
+
+                    </td>
+                    <td>{{el.name}}</td>
+                    <td>{{el.description}}</td>
+                    <td>{{el.date}}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr class="odd">
+                    <td valign="top" colspan="3" class="dataTables_empty">Записи не найдены</td>
+                </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>
+
+
+{% endblock %}
+
+{% block activeRegisterOfViolations %}active{% endblock %}
+
+{% block extra_script %}
+<script>$(document).ready(function() {
+  $("#example").DataTable();
+});
+
+</script>
+<script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/js/dataTables.bootstrap4.min.js"></script>
+{% endblock%}

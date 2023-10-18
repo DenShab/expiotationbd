@@ -1,0 +1,131 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load googlecharts %}
+{% block title %}
+Учет травм
+{% endblock %}
+
+{% block name %}
+Учет травм
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/css/dataTables.bootstrap4.min.css"
+      rel="stylesheet"/>
+<form method="POST">
+    {% csrf_token %}
+    <div class="btn-group mb-1 ">
+        <a href="{% url 'addAccountingForInjuries' %}" class="btn btn-sm btn-primary" role="button"
+           data-bs-toggle="button">Добавить несчастный случай</a>
+    </div>
+    <div class=" container-fluid">
+        <div class="row table-responsive">
+            <table id="example" class="table table-sm " cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Название травмы</th>
+                    <th>ФИО пострадавшего</th>
+                    <th>Описание травмы</th>
+                    <th>Дата происшествия</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if accountingForInjuries %}
+                {% for el in accountingForInjuries%}
+                <tr>
+                    <td>
+                        <button type="submit" class="btn btn-sm" name="value" value="{{el.id}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"></path>
+                                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"></path>
+                            </svg>
+                        </button>
+                    </td>
+                    <td>{{el.name}}</td>
+                    <td>{{el.personnel.fullname}}</td>
+                    <td>{{el.description}}</td>
+                    <td>{{el.date}}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr class="odd">
+                    <td valign="top" colspan="3" class="dataTables_empty">Записи не найдены</td>
+                </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>
+
+
+
+{% if accountingForInjuries %}
+
+<div class="container-fluid">
+    <div class="grid_12">
+        <h4 class="mb-3">Статистика по дням</h4>
+        <div id="count_graph"></div>
+    </div>
+    <div class="grid_4">
+        <h4 class="mb-3">Статистика по есяцам</h4>
+        <div id="count_sum"></div>
+    </div>
+    <div class="grid_4">
+        <h4 class="mb-3">Статистика по годам</h4>
+        <div id="valuesyears_sum"></div>
+    </div>
+</div>
+{% googlecharts %}
+{% data valuesdays "count" %}
+{% col "string" "Date" %}"{{ val }}"{% endcol %}
+{% col "number" "колличество травм" %}{{ val }}{% endcol %}
+{% enddata %}
+
+{% data valuesmonths "sum" %}
+{% col "string" "Date" %}"{{ val }}"{% endcol %}
+{% col "number" "колличество травм" %}{{ val }}{% endcol %}
+{% enddata %}
+
+{% data valuesyears "sum2" %}
+{% col "string" "Date" %}"{{ val }}"{% endcol %}
+{% col "number" "колличество травм" %}{{ val }}{% endcol %}
+{% enddata %}
+<!--kind: "ColumnChart",-->
+{% options %}
+kind: "LineChart",
+options: {
+backgroundColor: "#f9f9f9",
+colors: ["#09f"],
+gridlineColor: "#ddd",
+legend: "none",
+
+
+height: 500
+}
+{% endoptions %}
+
+{% graph "count_graph" "count" %} {# используем опции по умолчанию #}
+{% graph "count_sum" "sum" %} {# используем опции по умолчанию, снова #}
+{% graph "valuesyears_sum" "sum2" %} {# используем опции по умолчанию, снова #}
+
+{% endgooglecharts %}
+
+{% endif %}
+{% endblock %}
+
+{% block activeAccountingForInjuries %}active{% endblock %}
+
+{% block extra_script %}
+<script>
+$(document).ready(function() {
+  $("#example").DataTable();
+});
+
+
+</script>
+
+{% endblock%}

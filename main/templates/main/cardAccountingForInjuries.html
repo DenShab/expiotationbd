@@ -1,0 +1,85 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+Карточка травмы
+{% endblock %}
+
+{% block name %}
+Карточка травмы
+{% endblock %}
+
+{% block content %}
+{% load static %}
+
+
+<div class="row g-3">
+    <div>
+        <label class="form-label">ФИО</label>
+
+        <input class="form-control" type="text" value="{{ injuryAccounting.personnel.fullname }}" readonly>
+
+        <div class="invalid-feedback">
+            Valid last name is required.
+        </div>
+    </div>
+
+    <div >
+        <label class="form-label">Название травмы</label>
+
+        <input class="form-control" type="text" value="{{ injuryAccounting.name }}" readonly>
+
+        <div class="invalid-feedback">
+            Valid first name is required.
+        </div>
+    </div>
+
+    <div >
+        <label class="form-label">Описание травмы</label>
+
+<textarea class="form-control"  readonly>{{ injuryAccounting.description }}</textarea>
+        <div class="invalid-feedback">
+            Valid last name is required.
+        </div>
+    </div>
+
+    <div>
+        <label class="form-label">Дата травмы</label>
+
+        <input class="form-control" type="text" value="{{ injuryAccounting.date }}" readonly>
+
+        <div class="invalid-feedback">
+            Valid last name is required.
+        </div>
+    </div>
+
+
+    <hr class="my-4">
+    <div class="btn-group">
+        <button type="button" class="btn btn-danger" name="cancel" onclick=" relocate_home()">Отменить
+                    </button>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+
+function relocate_home()
+{
+     location.href = "/accountingForInjuries";
+}
+
+function relocate_this()
+{
+     location.href = "";
+}
+
+
+
+</script>
+
+
+{% endblock%}

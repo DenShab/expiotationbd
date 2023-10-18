@@ -1,0 +1,75 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+Карточка нарушения
+{% endblock %}
+
+{% block name %}
+Карточка нарушения
+{% endblock %}
+
+{% block content %}
+{% load static %}
+
+
+<div class="row g-3">
+    <div >
+        <label class="form-label">Название нарушения</label>
+
+        <input class="form-control" type="text" value="{{ violations.name }}" readonly>
+
+        <div class="invalid-feedback">
+            Valid first name is required.
+        </div>
+    </div>
+
+    <div >
+        <label class="form-label">Описание нарушения</label>
+
+<textarea class="form-control"  readonly>{{ violations.description }}</textarea>
+        <div class="invalid-feedback">
+            Valid last name is required.
+        </div>
+    </div>
+
+    <div>
+        <label class="form-label">Дата нарушения</label>
+
+        <input class="form-control" type="text" value="{{ violations.date }}" readonly>
+
+        <div class="invalid-feedback">
+            Valid last name is required.
+        </div>
+    </div>
+
+
+    <hr class="my-4">
+    <div class="btn-group">
+        <button type="button" class="btn btn-danger" name="cancel" onclick=" relocate_home()">Отменить
+                    </button>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+
+function relocate_home()
+{
+     location.href = "/registerOfViolations";
+}
+
+function relocate_this()
+{
+     location.href = "";
+}
+
+
+
+</script>
+
+
+{% endblock%}

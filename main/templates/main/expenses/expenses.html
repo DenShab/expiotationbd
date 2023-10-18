@@ -1,0 +1,115 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load googlecharts %}
+{% block title %}
+Затраты
+{% endblock %}
+
+{% block name %}
+Затраты
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/css/dataTables.bootstrap4.min.css"
+      rel="stylesheet"/>
+<form method="POST">
+    {% csrf_token %}
+    <div class="btn-group mb-1 ">
+        <a href="{% url 'addExpenses' %}" class="btn btn-sm btn-primary" role="button"
+           data-bs-toggle="button">Добавить затраты</a>
+    </div>
+    <div class=" container-fluid">
+        <div class="row table-responsive">
+            <table id="example" class="table table-sm " cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>Название товара</th>
+                    <th>Дата покупки</th>
+                    <th>Срок годности</th>
+                    <th>Количество</th>
+                    <th>Цена</th>
+                    <th>Стоимость</th>
+                    <th>Накладная</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if expenses %}
+                {% for el in expenses%}
+                <tr>
+                    <td>{{el.name}}</td>
+                    <td>{{el.date}}</td>
+                    <td>{{el.typeOfTesting}} {{el.expiration}}</td>
+                    <td>{{el.quantity}}</td>
+                    <td>{{el.price}}</td>
+                    <td>{{el.cost}}</td>
+                    <td><a href="{{el.invoice.url}}" download="">{{el.invoice}}</a></td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr class="odd">
+                    <td valign="top" colspan="3" class="dataTables_empty">Записи не найдены</td>
+                </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>
+
+
+{% if expenses %}
+
+<div class="container-fluid">
+    <div class="grid_4">
+        <h4 class="mb-3">Статистика по месяцам</h4>
+        <div id="count_sum"></div>
+    </div>
+    <div class="grid_4">
+        <h4 class="mb-3">Статистика по годам</h4>
+        <div id="valuesyears_sum"></div>
+    </div>
+</div>
+{% googlecharts %}
+
+
+{% data valuesmonths "sum" %}
+{% col "string" "Date" %}"{{ val }}"{% endcol %}
+{% col "number" "рублей" %}{{ val }}{% endcol %}
+{% enddata %}
+
+{% data valuesyears "sum2" %}
+{% col "string" "Date" %}"{{ val }}"{% endcol %}
+{% col "number" "рублей" %}{{ val }}{% endcol %}
+{% enddata %}
+<!--kind: "ColumnChart",-->
+{% options %}
+kind: "LineChart",
+options: {
+backgroundColor: "#f9f9f9",
+'width':'Auto',
+'height':500,
+}
+{% endoptions %}
+
+{% graph "count_sum" "sum" %} {# используем опции по умолчанию, снова #}
+{% graph "valuesyears_sum" "sum2" %} {# используем опции по умолчанию, снова #}
+
+{% endgooglecharts %}
+
+{% endif %}
+{% endblock %}
+
+
+{% block extra_script %}
+<script>
+$(document).ready(function() {
+  $("#example").DataTable();
+});
+
+
+
+</script>{% endblock %}
+
+{% block activeExpenses %}active{% endblock %}
+

@@ -1,0 +1,133 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}
+Учет оборудования
+{% endblock %}
+
+{% block name %}
+Учет оборудования
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/css/dataTables.bootstrap4.min.css"
+      rel="stylesheet"/>
+<h2></h2>
+
+<div class="btn-group mb-1">
+    <a href="{% url 'addEquipmentAccounting' %}" class="btn btn-sm btn-primary" role="button" data-bs-toggle="button">Добавить оборудование</a>
+</div>
+<div class="row table-responsive mb-3">
+    <table id="example" class="table table-sm " cellspacing="0">
+        <thead>
+        <tr>
+            <th>Наименование</th>
+            <th>Паспорт оборудования</th>
+            <th>Дата введения в эксплуатацию</th>
+            <th>Дата проведения тех обследования</th>
+            <th>Дата планируемого проведения тех обследования</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if equipmentAccounting %}
+        {% for el in equipmentAccounting%}
+        <tr>
+            <td>{{el.name}}</td>
+            <td><a href="{{el.equipmentPassport.url}}" download="">{{el.equipmentPassport}}</a></td>
+            <td>{{el.dateOfCommissioning}}</td>
+            <td>{{el.dateOfTechnicalInspection}}</td>
+            <td>{{el.dateOfPlannedTechnicalInspection}}</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr class="odd">
+            <td valign="top" colspan="3" class="dataTables_empty">Записи не найдены</td>
+        </tr>
+        {% endif %}
+        </tbody>
+    </table>
+</div>
+<h5 class="mb-3">График тех обследования</h5>
+<h5 class="mb-3" id="add-html-here"></h5>
+<table class="table mb-3">
+    <thead>
+    <tr>
+        <th>Дата</th>
+        <th>Наименование</th>
+    </tr>
+    </thead>
+    <tbody id="table_of_items">
+    {% for date , namelist in schedule.items %}
+    <tr>
+        <td>{{date}}</td>
+        <td>
+            {%for name in namelist%}
+            <li>{{name}}</li>
+            {%endfor%}
+        </td>
+    </tr>
+    {%endfor%}
+    </tbody>
+</table>
+
+<div class="btn-group mb-3">
+    <button class="w-100 btn btn-primary" type="submit" name="previous" formnovalidate>
+        Предыдущий месяц
+    </button>
+    <button class="w-100 btn btn-primary" type="submit" name="next" formnovalidate>Следующий
+        месяц
+    </button>
+</div>
+
+
+{% endblock %}
+
+{% block activeEquipmentAccounting %}active{% endblock %}
+
+{% block extra_script %}
+<script>
+        var n=0;
+              var ajaxFormNext = function() {
+              $.ajax({
+    method: 'post',
+    url: 'controllerTechnicalExaminations/',
+    data:  {'serialized-data': '' + n},
+    success: function (data) {
+    $("#add-html-here").html(data.period);
+    $("#table_of_items").html(data.html);
+    }
+}).done(function(response){
+$("#add-html-here").html(response.period);
+    $("#table_of_items").html(response.html);
+    console.log(response)
+});
+
+}
+ $('button[name="previous"]').on('click', function(e) {
+    console.log('My message');
+    n=n-1;
+  e.preventDefault();
+  ajaxFormNext();
+});
+
+ $('button[name="next"]').on('click', function(e) {
+console.log('My message');
+n=n+1;
+  e.preventDefault();
+  ajaxFormNext();
+});
+
+$(document).ready(function() {
+ajaxFormNext();
+  $("#example").DataTable();
+
+});
+
+
+</script>
+
+<script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/js/dataTables.bootstrap4.min.js"></script>
+{% endblock%}

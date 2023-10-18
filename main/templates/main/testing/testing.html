@@ -1,0 +1,136 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}
+Тестирования
+{% endblock %}
+
+{% block name %}
+Тестирования
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/css/dataTables.bootstrap4.min.css"
+      rel="stylesheet"/>
+<h2></h2>
+
+<div class="btn-group mb-1">
+    <a href="{% url 'addTesting' %}" class="btn btn-sm btn-primary" role="button" data-bs-toggle="button">Назначить
+        тестирование</a>
+</div>
+<div class="row table-responsive mb-3">
+    <table id="example" class="table table-sm " cellspacing="0">
+        <thead>
+        <tr>
+            <th>Работник</th>
+            <th>Вид тестирования</th>
+            <th>Дата тестирования</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if testing %}
+        {% for el in testing%}
+        <tr>
+            <td>{{el.personnel.fullname}}</td>
+            <td>{{el.typeOfTesting}}</td>
+            <td>{{el.date}}</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr class="odd">
+            <td valign="top" colspan="3" class="dataTables_empty">Записи не найдены</td>
+        </tr>
+        {% endif %}
+        </tbody>
+    </table>
+</div>
+<h5 class="mb-3">График тестирования</h5>
+<h5 class="mb-3" id="add-html-here"></h5>
+<table class="table mb-3">
+    <thead>
+    <tr>
+        <th>Дата</th>
+        <th>ФИО</th>
+    </tr>
+    </thead>
+    <tbody id="table_of_items">
+    {% for date , namelist in schedule.items %}
+    <tr>
+        <td>{{date}}</td>
+        <td>
+            {%for name in namelist%}
+            <li>{{name}}</li>
+            {%endfor%}
+        </td>
+    </tr>
+    {%endfor%}
+    </tbody>
+</table>
+
+<div class="btn-group mb-3">
+    <button class="w-100 btn btn-primary" type="submit" name="previous" formnovalidate>
+        Предыдущий месяц
+    </button>
+    <button class="w-100 btn btn-primary" type="submit" name="next" formnovalidate>Следующий
+        месяц
+    </button>
+</div>
+
+<br>
+
+<form>
+    <h5 class="mb-3">Импортировать тест</h5>
+    <input type="file" name="photo" multiple class="mb-3"
+           accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+    <br>
+    <input class="btn btn-sm btn-primary" type="submit" value="Импортировать">
+</form>
+
+{% endblock %}
+
+{% block activeTesting %}active{% endblock %}
+
+{% block extra_script %}
+<script>
+        var n=0;
+              var ajaxFormNext = function() {
+              $.ajax({
+    method: 'post',
+    url: 'controllerTesting/',
+    data:  {'serialized-data': '' + n},
+    success: function (data) {
+    $("#add-html-here").html(data.period);
+    $("#table_of_items").html(data.html);
+    }
+}).done(function(response){
+$("#add-html-here").html(response.period);
+    $("#table_of_items").html(response.html);
+    console.log(response)
+});
+
+}
+ $('button[name="previous"]').on('click', function(e) {
+    console.log('My message');
+    n=n-1;
+  e.preventDefault();
+  ajaxFormNext();
+});
+
+ $('button[name="next"]').on('click', function(e) {
+console.log('My message');
+n=n+1;
+  e.preventDefault();
+  ajaxFormNext();
+});
+$(document).ready(function() {
+  $("#example").DataTable();
+  ajaxFormNext();
+});
+
+</script>
+
+<script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.12/js/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/js/dataTables.bootstrap4.min.js"></script>
+{% endblock%}

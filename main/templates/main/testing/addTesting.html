@@ -1,0 +1,114 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+Добавление несчастного случая
+{% endblock %}
+
+{% block name %}
+Добавление несчастного случая
+{% endblock %}
+
+{% block content %}
+{% load static %}
+<form method="POST" action="#">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="row g-3">
+        <span>{{ error }}</span>
+        <div class="form-group">
+            {{ form.as_p }}
+            <p><label for="id_personnel">Сотрудник</label> <input type="text" name="personnel"
+                                                                  style="width: 400px"
+                                                                  class="basicAutoComplete form-control"
+                                                                  data-url="email_autocomplete/" required=""
+                                                                  id="id_personnel"></p>
+        </div>
+        <hr class="my-4">
+        <div class="btn-group">
+            <button class="w-100 btn btn-secondary" type="submit" id="3" name="clean">Очистить</button>
+            <button class="w-100 btn btn-primary" type="submit" name="save">Сохранить</button>
+            <button class='w-100 btn btn-danger' type="submit" name="remove_levels" value="delete"><span
+                    class="fa fa-times"></span> Отментиь
+            </button>
+        </div>
+        <div id="confirm" class="modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p>Сохранить данные?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit" name="save">Сохранить</button>
+                        <button type="button" class="btn btn-danger" name="cancel" onclick=" relocate_home()">Отменить
+                        </button>
+                        <button type="button" data-dismiss="modal" class="btn btn-secondary">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="confirm2" class="modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p>Сохранить данные?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" type="submit" name="save">Сохранить</button>
+                        <button type="button" class="btn btn-danger" name="cancel" onclick=" relocate_this()">Очистить
+                        </button>
+                        <button type="button" data-dismiss="modal" class="btn btn-secondary">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
+{% block extra_script %}
+<script src="https://cdn.jsdelivr.net/gh/xcash/bootstrap-autocomplete@v2.3.7/dist/latest/bootstrap-autocomplete.min.js"></script>
+<script>
+        $('.basicAutoComplete').autoComplete(
+            {minLength: 1}
+        );
+        $('.dropdown-menu').css({'top': 'auto', 'left': 'auto'})
+
+
+
+</script>
+<script type="text/javascript" src="{% static 'js/formset.js' %}"></script>
+<script type="text/javascript">
+ $('button[name="remove_levels"]').on('click', function(e) {
+  var $form = $(this).closest('form');
+  e.preventDefault();
+  $('#confirm').modal({
+      backdrop: 'static',
+      keyboard: false
+    })
+    .one('click', '#delete', function(e) {
+      $form.trigger('submit');
+    });
+});
+ $('button[name="clean"]').on('click', function(e) {
+  var $form = $(this).closest('form');
+  e.preventDefault();
+  $('#confirm2').modal({
+      backdrop: 'static',
+      keyboard: false
+    })
+    .one('click', '#delete', function(e) {
+      $form.trigger('submit');
+    });
+});
+function relocate_home()
+{
+     location.href = "/testing";
+}
+function relocate_this()
+{
+     location.href = "/addTesting";
+}
+
+
+
+</script>
+{% endblock%}

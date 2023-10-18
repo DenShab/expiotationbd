@@ -1,0 +1,121 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}
+Мониторинг
+{% endblock %}
+
+{% block name %}
+Мониторинг
+{% endblock %}
+
+{% block content %}
+<button type="button"  class="btn btn-primary">Добавить</button>
+
+<h4 class="mb-3">Регистрируемый эксплуатационный показатель</h4>
+<div class="table-responsive">
+    <table class="table table-striped table-sm" onload="startTimer()">
+        <thead>
+        <tr>
+            <th>Время работы двигателя погрузочного агрегата T1</th>
+            <th>Время простоя погрузочного агрегата при включенном двигателе T2</th>
+            <th>Время работы гидропривода T3</th>
+            <th>Средняя скорость при движении погрузочного агрегата Vср</th>
+            <th>Время движения агрегата T4</th>
+            <th>Пройденный погрузочным агрегатом путь S</th>
+            <th>Время движения погрузочного агрегата с грузом T5</th>
+            <th>Время нагруженного грузом рабочего оборудования T6</th>
+        </tr>
+        </thead>
+        <tbody id="confirm">
+        <tr>
+            <td>1,001</td>
+            <td>Lorem</td>
+            <td>ipsum</td>
+            <td>dolor</td>
+            <td>sit</td>
+            <td>1,001</td>
+            <td>1,001</td>
+            <td>1,001</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<h4 class="mb-3">Расчетный показатель эффективности использования погрузочного агрегата</h4>
+<div class="table-responsive">
+    <table class="table table-striped table-sm " onload="startTimer2()">
+        <thead>
+        <tr>
+            <th>Коэффициент использования гидропривода погрузочного агрегата K1</th>
+            <th>Время холостого позиционирования рабочего оборудования T7</th>
+            <th>Время холостых переездов и переезды к месту (от места) работ T8</th>
+            <th>Коэффициент полезного использования погрузочного агрегата на погрузочно-разгрузочных
+                (погрузочно-транспортных) работах K2
+            </th>
+            <th>Коэффициент простоя агрегата K1</th>
+        </tr>
+        </thead>
+        <tbody id="confirm2">
+        <tr>
+            <td>1,001</td>
+            <td>1,001</td>
+            <td>1,001</td>
+            <td>1,001</td>
+            <td>1,001</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block activeMonitoring %}active{% endblock %}
+
+{% block extra_script %}
+<script>
+    var timer = null;
+function startTimer() {
+  if (timer)
+    return;
+  timer = setInterval(function() {
+    var a = [];
+    for (var i = 1; i <= 8*8; i++)
+      a.push(i);
+    a.sort(function() { return Math.random() - 0.5; });
+    var table = $('#confirm');
+
+    var index = 0;
+
+      var row = $('<tr>');
+      for (c = 0; c < 8; ++c) {
+        row.append('<td>' + a[index++] + '</td>');
+      }
+      table.append(row);
+      var rowCount = document.getElementById('confirm').rows.length;
+    if(rowCount > 10) {
+        document.getElementById('confirm').deleteRow(0);
+    }
+    var a2 = [];
+    for (var i = 1; i <= 5*5; i++)
+      a2.push(i);
+    a2.sort(function() { return Math.random() - 0.5; });
+    var table2 = $('#confirm2');
+
+    var index2 = 0;
+
+      var row2 = $('<tr>');
+      for (c = 0; c < 5; ++c) {
+        row2.append('<td>' + a2[index2++] + '</td>');
+      }
+      table2.append(row2);
+
+      var rowCount2 = document.getElementById('confirm2').rows.length;
+    if(rowCount2 > 10) {
+        document.getElementById('confirm2').deleteRow(0);
+    }
+  }, 1000);
+}
+startTimer();
+
+</script>
+{% endblock%}
