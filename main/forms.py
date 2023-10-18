@@ -112,8 +112,8 @@ class CompulsoryEducationFileForm(ModelForm):
         model = CompulsoryEducationFile
         fields = ['file']
         widgets = {
-            'file': FileInput(attrs={'multiple': True,
-                                     'enctype': "multipart/form-data"}),
+            'file': FileInput(attrs={'enctype': "multipart/form-data",
+                                     'аallow_multiple_selected':True}),
         }
 
 
@@ -127,7 +127,8 @@ class AdditionalTrainingFileFileForm(ModelForm):
 
 
 class CompulsoryEducationForm(ModelForm):
-    files = FileField(widget=ClearableFileInput(attrs={'multiple': True, 'class': 'formset-field'}), required=False)
+    files = FileField(widget=ClearableFileInput(attrs={ 'class': 'formset-field',
+                                     'аallow_multiple_selected':True}), required=False)
 
     class Meta:
         model = CompulsoryEducation
@@ -156,7 +157,8 @@ class CompulsoryEducationForm(ModelForm):
 
 
 class AdditionalTrainingForm(ModelForm):
-    files = FileField(widget=ClearableFileInput(attrs={'multiple': True, 'class': 'formset-field'}), required=False)
+    files = FileField(widget=ClearableFileInput(attrs={'class': 'formset-field',
+                                     'аallow_multiple_selected':True}), required=False)
 
     class Meta:
         model = AdditionalTraining
@@ -184,8 +186,8 @@ class DocumentationForm(ModelForm):
         model = Documentation
         fields = ['file']
         widgets = {
-            'file': FileInput(attrs={'multiple': True,
-                                     'enctype': "multipart/form-data"}),
+            'file': FileInput(attrs={'enctype': "multipart/form-data",
+                                     'аallow_multiple_selected':True}),
         }
 
 
@@ -231,8 +233,8 @@ class ExpensesForm(ModelForm):
                 attrs={"class": "form-control",
                        'step': "0.01"}
             ),
-            'invoice': FileInput(attrs={'multiple': True,
-                                        'enctype': "multipart/form-data"}),
+            'invoice': FileInput(attrs={'enctype': "multipart/form-data",
+                                     'аallow_multiple_selected':True}),
 
         }
 
@@ -246,8 +248,8 @@ class EquipmentAccountingForm(ModelForm):
             "name": TextInput(
                 attrs={"class": "form-control"}
             ),
-            'equipmentPassport': FileInput(attrs={'multiple': True,
-                                                  'enctype': "multipart/form-data"}),
+            'equipmentPassport': FileInput(attrs={'enctype': "multipart/form-data",
+                                     'аallow_multiple_selected':True}),
 
             "dateOfCommissioning": TextInput(
                 attrs={"class": "form-control",
